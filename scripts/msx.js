@@ -37,10 +37,10 @@ const createMSXConfig = (url) => ({
   ],
 });
 
-if (process.env.DEPLOY_URL) {
-  console.log('DEPLOY_URL', process.env.DEPLOY_URL);
+if (process.env.PUBLIC_URL) {
+  console.log('PUBLIC_URL', process.env.PUBLIC_URL);
   const msxFolder = path.resolve(__dirname, '../build/msx');
-  const msxConfig = createMSXConfig(process.env.DEPLOY_URL);
+  const msxConfig = createMSXConfig(process.env.PUBLIC_URL);
 
   if (!fs.existsSync(msxFolder)) {
     fs.mkdirSync(msxFolder, { recursive: true });
@@ -48,5 +48,5 @@ if (process.env.DEPLOY_URL) {
 
   fs.writeFileSync(`${msxFolder}/start.json`, JSON.stringify(msxConfig, null, 2), {});
 } else {
-  console.log('DEPLOY_URL not found');
+  console.log('PUBLIC_URL not found');
 }
