@@ -32,32 +32,21 @@ const createMSXConfig = (url) => ({
             },
           },
         },
-        {
-          type: 'control',
-          layout: '0,1,5,1',
-          image: 'http://msxplayer.ru/assets/images/features/apps.png',
-          label: 'Media Station X Player',
-          action: 'content:request:interaction:init@http://msxplayer.ru/plugins/links.html',
-          selection: {
-            important: true,
-            action: 'update:content:description',
-            data: {
-              text: ['{txt:msx-white: Media Station X Player} — В этом плейлисте собраны все самые лучшие ссылки для твоего телевизора'],
-            },
-          },
-        },
       ],
     },
   ],
 });
 
-if (process.env.URL) {
+if (process.env.DEPLOY_URL) {
+  console.log('DEPLOY_URL', process.env.DEPLOY_URL);
   const msxFolder = path.resolve(__dirname, '../build/msx');
-  const msxConfig = createMSXConfig(process.env.URL);
+  const msxConfig = createMSXConfig(process.env.DEPLOY_URL);
 
   if (!fs.existsSync(msxFolder)) {
     fs.mkdirSync(msxFolder, { recursive: true });
   }
 
   fs.writeFileSync(`${msxFolder}/start.json`, JSON.stringify(msxConfig, null, 2), {});
+} else {
+  console.log('DEPLOY_URL not found');
 }

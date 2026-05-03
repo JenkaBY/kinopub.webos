@@ -1,46 +1,76 @@
-name: Build package on merge
-'on':
+name: Build and Deploy to GitHub Pages
+
+on:
   push:
     branches:
       - master
+  workflow_dispatch:
+
+# Cancel any in-progress run for the same ref to avoid redundant deployments.
+concurrency:
+  group: pages-${{ github.ref }}
+  cancel-in-progress: true
+
+# Least-privilege default: read-only for all jobs.
+# The deploy job overrides this with the minimum write scopes needed for Pages.
+permissions:
+  contents: read
+
 jobs:
-  build_and_pack:
+  build:
+    name: Build
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
-
-      - name: Setup node@v14
-        uses: actions/setup-node@v2
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
         with:
-          node-version: '14'
+          fetch-depth: 1 # Shallow clone — full history not needed for build/deploy
 
-      - name: Restore yarn cache
-        uses: actions/cache@v2
-        id: yarn-cache
+      - name: Setup Node.js
+        uses: actions/setup-node@3235b876344d2a9aa001b8d1453c930bba69e610 # v3.9.1
         with:
-          path: '**/node_modules'
-          key: ${{ runner.os }}-node_modules-${{ hashFiles('**/yarn.lock') }}
+          node-version: '20'
+
+      - name: Get Yarn cache directory
+        id: yarn-cache-dir
+        run: echo "dir=$(yarn cache dir)" >> "$GITHUB_OUTPUT"
+
+      - name: Restore Yarn cache
+        uses: actions/cache@668228422ae6a00e4ad889ee87cd7109ec5666a7 # v5.0.4
+        with:
+          path: ${{ steps.yarn-cache-dir.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
-            ${{ runner.os }}-node_modules-
+            ${{ runner.os }}-yarn-
 
       - name: Install dependencies
-        if: steps.yarn-cache.outputs.cache-hit != 'true'
         run: yarn install --frozen-lockfile
 
       - name: Build app
         run: yarn build
 
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@983d7736d9b0ae728b81ab479565c72886d7745b # v5.0.0
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@56afc609e74202658d3ffba0e8f6dda462b719fa # v3.0.1
+        with:
+          path: ./build
+
+  deploy:
+    name: Deploy to GitHub Pages
+    runs-on: ubuntu-latest
+    needs: build
+    timeout-minutes: 10
+    # Grant only the scopes required by the Pages OIDC deploy action.
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
       - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./build
-
-      - name: Package app
-        run: yarn package
-
-      - name: Archive package
-        uses: actions/upload-artifact@v2
-        with:
-          path: out/*
+        id: deployment
+        uses: actions/deploy-pages@d6db90164ac5ed86f2b6aed7e0febac5b3c0c03e # v4.0.5
