@@ -49,7 +49,7 @@ jobs:
           echo "PUBLIC_URL=https://${GITHUB_REPOSITORY_OWNER}.github.io/${repo_name}" >> "$GITHUB_ENV"
 
       - name: Build app
-        run: npm run build:prod
+        run: npm run build
       - name: Configure GitHub Pages
         uses: actions/configure-pages@983d7736d9b0ae728b81ab479565c72886d7745b # v5.0.0
 
