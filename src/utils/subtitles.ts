@@ -81,7 +81,10 @@ class WebVTTConverter {
   }
 
   release() {
-    URL.createObjectURL(this.objectURL);
+    if (this.objectURL) {
+      URL.revokeObjectURL(this.objectURL);
+      this.objectURL = undefined;
+    }
   }
 }
 

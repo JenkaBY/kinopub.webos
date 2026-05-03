@@ -22,10 +22,10 @@ const Lazy: React.FC<Props> = (props) => {
 };
 
 export function withLazy(options: Props) {
-  return function WithLazy<P>(Component: React.ComponentType<P>): React.FC<P> {
+  return function WithLazy<P extends object>(Component: React.ComponentType<P>): React.FC<P> {
     return (props: P) => (
       <Lazy {...options}>
-        <Component {...props} />
+        <Component {...(props as P)} />
       </Lazy>
     );
   };
