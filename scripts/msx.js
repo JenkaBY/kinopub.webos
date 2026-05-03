@@ -6,7 +6,7 @@ const createMSXConfig = (url) => ({
   name: 'Kino Station X',
   extension: `Версия ${version}`,
   version: `${version}`,
-  parameter: 'content:{PREFIX}{SERVER}/msx/start.json',
+  parameter: `content:${url}/msx/start.json`,
   action: '[settings:validate_links:0|home]',
   dictionary: 'http://msxplayer.ru/plugins/assets/ru.json',
   pages: [
