@@ -9,7 +9,7 @@
   "private": true,
   "scripts": {
     "start": "craco --openssl-legacy-provider start",
-    "build:prod": "cross-env CI=false craco --openssl-legacy-provider build",
+    "build": "cross-env CI=false craco --openssl-legacy-provider build",
     "postbuild": "dotenv-load node ./scripts/msx.js",
     "package": "dotenv-load node ./scripts/package.js"
   },
