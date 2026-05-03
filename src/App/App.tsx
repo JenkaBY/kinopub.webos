@@ -39,35 +39,35 @@ const queryClient = new QueryClient({
     },
   },
 });
-
 type Props = {};
+const baseHref = process.env.BASE_HREF || '';
 
 const App: React.FC<Props> = (props) => {
   return (
     <Router>
       <QueryClientProvider client={queryClient}>
         <Views {...props}>
-          <View path={PATHS.Index} component={IndexView} layout="fill" exact />
-          <View path={PATHS.Home} component={HomeView} />
-          <View path={PATHS.Search} component={SearchView} />
-          <View path={PATHS.Category} component={CategoryView} />
-          <View path={PATHS.Genre} component={GenreView} />
-          <View path={PATHS.Watching} component={WatchingView} />
-          <View path={PATHS.Releases} component={ReleasesView} />
-          <View path={PATHS.Bookmark} component={BookmarkView} />
-          <View path={PATHS.Bookmarks} component={BookmarksView} />
-          <View path={PATHS.Collection} component={CollectionView} />
-          <View path={PATHS.Collections} component={CollectionsView} />
-          <View path={PATHS.Channel} component={ChannelView} layout="fill" />
-          <View path={PATHS.Channels} component={ChannelsView} />
-          <View path={PATHS.History} component={HistoryView} />
-          <View path={PATHS.Item} component={ItemView} layout="fill" />
-          <View path={PATHS.Video} component={VideoView} layout="fill" />
-          <View path={PATHS.Trailer} component={TrailerView} layout="fill" />
-          <View path={PATHS.Pair} component={PairView} layout="fill" />
-          <View path={PATHS.Donate} component={DonateView} />
-          <View path={PATHS.Speed} component={SpeedView} />
-          <View path={PATHS.Settings} component={SettingsView} />
+          <View path={`${baseHref}${PATHS.Index}`} component={IndexView} layout="fill" exact />
+          <View path={`${baseHref}${PATHS.Home}`} component={HomeView} />
+          <View path={`${baseHref}${PATHS.Search}`} component={SearchView} />
+          <View path={`${baseHref}${PATHS.Category}`} component={CategoryView} />
+          <View path={`${baseHref}${PATHS.Genre}`} component={GenreView} />
+          <View path={`${baseHref}${PATHS.Watching}`} component={WatchingView} />
+          <View path={`${baseHref}${PATHS.Releases}`} component={ReleasesView} />
+          <View path={`${baseHref}${PATHS.Bookmark}`} component={BookmarkView} />
+          <View path={`${baseHref}${PATHS.Bookmarks}`} component={BookmarksView} />
+          <View path={`${baseHref}${PATHS.Collection}`} component={CollectionView} />
+          <View path={`${baseHref}${PATHS.Collections}`} component={CollectionsView} />
+          <View path={`${baseHref}${PATHS.Channel}`} component={ChannelView} layout="fill" />
+          <View path={`${baseHref}${PATHS.Channels}`} component={ChannelsView} />
+          <View path={`${baseHref}${PATHS.History}`} component={HistoryView} />
+          <View path={`${baseHref}${PATHS.Item}`} component={ItemView} layout="fill" />
+          <View path={`${baseHref}${PATHS.Video}`} component={VideoView} layout="fill" />
+          <View path={`${baseHref}${PATHS.Trailer}`} component={TrailerView} layout="fill" />
+          <View path={`${baseHref}${PATHS.Pair}`} component={PairView} layout="fill" />
+          <View path={`${baseHref}${PATHS.Donate}`} component={DonateView} />
+          <View path={`${baseHref}${PATHS.Speed}`} component={SpeedView} />
+          <View path={`${baseHref}${PATHS.Settings}`} component={SettingsView} />
           <View component={NotFoundView} />
         </Views>
       </QueryClientProvider>

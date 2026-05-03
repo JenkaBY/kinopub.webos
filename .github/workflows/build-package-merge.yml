@@ -47,6 +47,7 @@ jobs:
         run: |
           repo_name="${GITHUB_REPOSITORY#*/}"
           echo "PUBLIC_URL=https://${GITHUB_REPOSITORY_OWNER}.github.io/${repo_name}" >> "$GITHUB_ENV"
+          echo "BASE_HREF=/${repo_name}" >> "$GITHUB_ENV"
 
       - name: Build app
         run: npm run build
